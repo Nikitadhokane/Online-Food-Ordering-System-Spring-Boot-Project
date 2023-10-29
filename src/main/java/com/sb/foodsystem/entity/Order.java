@@ -27,11 +27,11 @@ public class Order {
 	@Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
 	
-	@Column(name="Order_ID")
-	private Long order_id;
+	@Column(name="order_id")
+	private Long orderId;
 	
 	@ManyToOne
-	@JoinColumn(name="user_id")
+    @JoinColumn(name = "user_id", insertable = false, updatable = false)
 	private User user;
 	
 	@ManyToOne
@@ -44,7 +44,7 @@ public class Order {
 	@Column(name="Total_Amount")
 	private int total_amount;
 	
-	@Column(name="User_ID")
+	 @Column(name = "User_ID", insertable = false, updatable = false)
 	private Long userId;
 	
 	@Column(name="Order_Status")

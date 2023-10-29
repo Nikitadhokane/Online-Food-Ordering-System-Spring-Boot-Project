@@ -13,12 +13,13 @@ import com.sb.foodsystem.service.MenuService;
 public class MenuServiceImpl implements MenuService {
 
 	@Autowired
-    private MenuRepository menuRepository;
+    private final MenuRepository menuRepository;
 	
 	@Autowired
-    private MenuConverter menuConverter;
+    private final MenuConverter menuConverter;
 
-    public MenuServiceImpl(MenuRepository menuRepository, MenuConverter menuConverter)
+    
+    public MenuServiceImpl(MenuRepository menuRepository, MenuConverter menuConverter) 
     {
         this.menuRepository = menuRepository;
         this.menuConverter = menuConverter;
@@ -33,15 +34,14 @@ public class MenuServiceImpl implements MenuService {
     }
 
     @Override
-    public MenuDTO getMenuById(Long id) 
+    public MenuDTO getMenuById(Long id)
     {
         Menu menu = menuRepository.findById(id).orElse(null);
         return menuConverter.entityToDto(menu);
     }
 
     @Override
-    public MenuDTO updateMenu(Long id, MenuDTO menuDTO) 
-    {
+    public MenuDTO updateMenu(Long id, MenuDTO menuDTO) {
         Menu menu = menuConverter.dtoToEntity(menuDTO);
         menu.setId(id); // Assuming id is part of the MenuDTO
         menu = menuRepository.save(menu);
@@ -49,7 +49,7 @@ public class MenuServiceImpl implements MenuService {
     }
 
     @Override
-    public String deleteMenu(Long id)
+    public String deleteMenu(Long id) 
     {
         menuRepository.deleteById(id);
         return "Menu with ID " + id + " has been deleted successfully.";

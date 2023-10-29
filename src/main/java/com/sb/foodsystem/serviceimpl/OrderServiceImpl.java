@@ -13,12 +13,13 @@ import com.sb.foodsystem.service.OrderService;
 public class OrderServiceImpl implements OrderService {
 
 	@Autowired
-    private OrderRepository orderRepository;
+    private final OrderRepository orderRepository;
 	
 	@Autowired
-    private OrderConverter orderConverter;
+    private final OrderConverter orderConverter;
 
-    public OrderServiceImpl(OrderRepository orderRepository, OrderConverter orderConverter) 
+    
+    public OrderServiceImpl(OrderRepository orderRepository, OrderConverter orderConverter)
     {
         this.orderRepository = orderRepository;
         this.orderConverter = orderConverter;
@@ -33,25 +34,25 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public OrderDTO getOrderById(Long id) 
+    public OrderDTO getOrderById(Long orderId) 
     {
-        Order order = orderRepository.findById(id).orElse(null);
+        Order order = orderRepository.findById(orderId).orElse(null);
         return orderConverter.entityToDto(order);
     }
 
     @Override
-    public OrderDTO updateOrder(Long id, OrderDTO orderDTO) 
+    public OrderDTO updateOrder(Long orderId, OrderDTO orderDTO) 
     {
         Order order = orderConverter.dtoToEntity(orderDTO);
-        order.setUserId(id); // Assuming id is part of the OrderDTO
+        order.setOrderId(orderId); // Assuming id is part of the OrderDTO
         order = orderRepository.save(order);
         return orderConverter.entityToDto(order);
     }
 
     @Override
-    public String deleteOrder(Long id) 
+    public String deleteOrder(Long orderId)
     {
-        orderRepository.deleteById(id);
-        return "Order with ID " + id + " has been deleted successfully.";
+        orderRepository.deleteById(orderId);
+        return "Order with ID " + orderId + " has been deleted successfully.";
     }
 }

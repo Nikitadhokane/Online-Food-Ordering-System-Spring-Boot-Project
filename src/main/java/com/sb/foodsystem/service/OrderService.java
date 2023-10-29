@@ -4,11 +4,11 @@ import com.sb.foodsystem.model.OrderDTO;
 
 public interface OrderService {
 
-    OrderDTO createOrder(OrderDTO orderDTO);
+	OrderDTO createOrder(OrderDTO orderDTO);
 
-    OrderDTO getOrderById(Long id);
+    OrderDTO getOrderById(Long orderId);
 
-    OrderDTO updateOrder(Long id, OrderDTO orderDTO);
+    OrderDTO updateOrder(Long orderId, OrderDTO orderDTO);
 
-    String deleteOrder(Long id);
+    String deleteOrder(Long orderId);
 }

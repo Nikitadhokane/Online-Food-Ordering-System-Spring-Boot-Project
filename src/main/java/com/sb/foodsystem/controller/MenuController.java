@@ -1,11 +1,7 @@
 package com.sb.foodsystem.controller;
 
-import java.util.List;
-import java.util.Optional;
-
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -14,56 +10,50 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.sb.foodsystem.entity.Menu;
-import com.sb.foodsystem.services.MenuService;
+import com.sb.foodsystem.converter.MenuConverter;
+import com.sb.foodsystem.model.MenuDTO;
+import com.sb.foodsystem.service.MenuService;
 
 @RestController
-@RequestMapping("/menus")
+//@RequestMapping("/menu")
+@RequestMapping("/api")
 public class MenuController {
-	
+
 	@Autowired
-	private MenuService menuService;
+    private final MenuService menuService;
 	
-	public MenuController (MenuService menuService)
-	{
-		this.menuService=menuService;
-	}
-	
-	@GetMapping
-    public List<Menu> getAllMenus() 
-	{
-        return menuService.getAllMenus();
-    }
+	@SuppressWarnings("unused")
+	@Autowired
+    private final MenuConverter menuConverter;
 
-    @GetMapping("/{menuId}")
-    public Menu getMenuById(@PathVariable Long menuId)
+   
+    public MenuController(MenuService menuService, MenuConverter menuConverter) 
     {
-        return menuService.getMenuById(menuId)
-                .orElseThrow(() -> new RuntimeException("Menu not found with id: " + menuId));
+        this.menuService = menuService;
+        this.menuConverter = menuConverter;
     }
 
-    @PostMapping
-    public Menu createMenu(@RequestBody Menu menu) 
+    @PostMapping("/menu")
+    public MenuDTO createMenu(@RequestBody MenuDTO menuDTO) 
     {
-        return menuService.saveMenu(menu);
+        return menuService.createMenu(menuDTO);
+       // return new ResponseEntity<>(createdMenu, HttpStatus.CREATED);
     }
 
-    @PutMapping("/{menuId}")
-    public Menu updateMenu(@PathVariable Long menuId, @RequestBody Menu menu) 
+    @GetMapping("/menu/{id}")
+    public MenuDTO getMenuById(@PathVariable Long id) {
+        return menuService.getMenuById(id);
+    }
+
+    @PutMapping("/menu/{id}")
+    public MenuDTO updateMenu(@PathVariable Long id, @RequestBody MenuDTO menuDTO) 
     {
-        if (menuService.getMenuById(menuId).isPresent())
-        {
-            menu.setId(menuId);
-            return menuService.updateMenu(menu);
-        } 
-        else
-        {
-            throw new RuntimeException("Menu not found with id: " + menuId);
-        }
+        return menuService.updateMenu(id, menuDTO);
     }
 
-			
-		
-	
-
+    @DeleteMapping("/{id}")
+    public String deleteMenu(@PathVariable Long id) 
+    {
+        return menuService.deleteMenu(id);
+    }
 }

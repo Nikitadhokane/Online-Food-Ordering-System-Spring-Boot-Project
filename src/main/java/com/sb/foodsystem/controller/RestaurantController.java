@@ -1,8 +1,9 @@
 package com.sb.foodsystem.controller;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -11,53 +12,53 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.sb.foodsystem.entity.Restaurant;
-import com.sb.foodsystem.services.RestaurantService;
+import com.sb.foodsystem.converter.RestaurantConverter;
+import com.sb.foodsystem.model.RestaurantDTO;
+import com.sb.foodsystem.service.RestaurantService;
 
 @RestController
-@RequestMapping("/restaurants")
+//@RequestMapping("/restaurants")
+@RequestMapping("/api/restaurants")
 public class RestaurantController {
 
-	    @Autowired
-	    private RestaurantService restaurantService;
-	    
-	    public RestaurantController(RestaurantService restaurantService) 
-	    {
-	        this.restaurantService = restaurantService;
-	    }
+	@Autowired
+    private final RestaurantService restaurantService;
+	
+	@SuppressWarnings("unused")
+	@Autowired
+    private final RestaurantConverter restaurantConverter;
 
-	    @GetMapping
-	    public List<Restaurant> getAllRestaurants() 
-	    {
-	        return restaurantService.getAllRestaurants();
-	    }
+    
+    public RestaurantController(RestaurantService restaurantService, RestaurantConverter restaurantConverter)
+    {
+        this.restaurantService = restaurantService;
+        this.restaurantConverter = restaurantConverter;
+    }
 
-	    @GetMapping("/{id}")
-	    public Restaurant getRestaurantById(@PathVariable Long id)
-	    {
-	        return restaurantService.getRestaurantById(id)
-	                .orElseThrow(() -> new RuntimeException("Restaurant not found with id: " + id));
-	    }
+    @PostMapping("/restaurants")
+    public ResponseEntity<RestaurantDTO> createRestaurant(@RequestBody RestaurantDTO restaurantDTO) 
+    {
+        RestaurantDTO createdRestaurant = restaurantService.createRestaurant(restaurantDTO);
+        return new ResponseEntity<>(createdRestaurant, HttpStatus.CREATED);
+    }
 
-	    @PostMapping
-	    public Restaurant createRestaurant(@RequestBody Restaurant restaurant) {
-	        return restaurantService.saveRestaurant(restaurant);
-	    }
+    @GetMapping("/restaurants/{id}")
+    public ResponseEntity<RestaurantDTO> getRestaurantById(@PathVariable Long id) 
+    {
+        RestaurantDTO restaurant = restaurantService.getRestaurantById(id);
+        return new ResponseEntity<>(restaurant, HttpStatus.OK);
+    }
 
-	    @PutMapping("/{id}")
-	    public Restaurant updateRestaurant(@PathVariable Long id, @RequestBody Restaurant restaurant) 
-	    {
-	        if (restaurantService.getRestaurantById(id).isPresent())
-	        {
-	            restaurant.setId(id);
-	            return restaurantService.updateRestaurant(restaurant);
-	        } 
-	        else 
-	        {
-	            throw new RuntimeException("Restaurant not found with id: " + id);
-	        }
-	    }
+    @PutMapping("/restaurants/{id}")
+    public ResponseEntity<RestaurantDTO> updateRestaurant(@PathVariable Long id, @RequestBody RestaurantDTO restaurantDTO)
+    {
+        RestaurantDTO updatedRestaurant = restaurantService.updateRestaurant(id, restaurantDTO);
+        return new ResponseEntity<>(updatedRestaurant, HttpStatus.OK);
+    }
 
-	    
-
+    @DeleteMapping("/{id}")
+    public String deleteRestaurant(@PathVariable Long id) 
+    {
+        return restaurantService.deleteRestaurant(id);
+    }
 }

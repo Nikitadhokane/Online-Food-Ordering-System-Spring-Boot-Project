@@ -26,7 +26,7 @@ public class Cart {
     @GeneratedValue(strategy=GenerationType.IDENTITY)
 	
 	@Column(name="Cart_Id")
-	private Long id;
+	private Long cartId;
 	
 	@Column(name="Quantity")
 	private int quantity;
@@ -38,14 +38,6 @@ public class Cart {
 	@ManyToOne
 	@JoinColumn(name="menu_id")
 	private Menu menu;
-	
-
-	
-	
-	
-	
-	
-	
 	
 }
 	

@@ -11,10 +11,9 @@ public class UserConverter {
     public UserDTO entityToDto(User user)
     {
         UserDTO userDTO = new UserDTO();
-        userDTO.setUserId(user.getUser_id());
+        userDTO.setUserId(user.getUserId());
         userDTO.setPassword(user.getPassword());
-        userDTO.setFirstNmae(user.getFirstName());
-        userDTO.setLastName(user.getLastName());
+        userDTO.setFirstNmae(user.getUserName());
         userDTO.setEmail(user.getEmail());
         userDTO.setAddress(user.getAddress());
         userDTO.setContact(user.getContact());
@@ -24,10 +23,9 @@ public class UserConverter {
     public User dtoToEntity(UserDTO userDTO)
     {
         User user = new User();
-        user.setUser_id(userDTO.getUserId());
+        user.setUserId(userDTO.getUserId());
         user.setPassword(userDTO.getPassword());
-        user.setFirstName(userDTO.getFirstNmae());
-        user.setLastName(userDTO.getLastName());
+        user.setUserName(userDTO.getFirstNmae());
         user.setEmail(userDTO.getEmail());
         user.setAddress(userDTO.getAddress());
         user.setContact(userDTO.getContact());

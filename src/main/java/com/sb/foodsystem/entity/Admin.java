@@ -39,5 +39,7 @@ public class Admin {
 	@Column(name="Contact_Number")
 	private int contact;
 
+	
+
 
 }

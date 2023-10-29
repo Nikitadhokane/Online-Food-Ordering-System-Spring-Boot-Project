@@ -1,7 +1,5 @@
 package com.sb.foodsystem.controller;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,50 +11,54 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.sb.foodsystem.entity.Cart;
-import com.sb.foodsystem.services.CartService;
+import com.sb.foodsystem.converter.CartConverter;
+import com.sb.foodsystem.model.CartDTO;
+import com.sb.foodsystem.service.CartService;
 
 @RestController
-@RequestMapping("/cart")
+//@RequestMapping("/carts")
+@RequestMapping("/api/carts")
 public class CartController {
 
-	    @Autowired
-	    private CartService cartService;
-	    
-	    public CartController(CartService cartService)
-	    {
-	        this.cartService = cartService;
-	    }
+	@Autowired
+    private CartService cartService;
+	
+	@SuppressWarnings("unused")
+	@Autowired
+    private CartConverter cartConverter;
 
-	    @GetMapping
-	    public List<Cart> getAllCarts() 
-	    {
-	        return cartService.getAllCarts();
-	    }
+    public CartController(CartService cartService, CartConverter cartConverter) 
+    {
+        this.cartService = cartService;
+        this.cartConverter = cartConverter;
+    }
 
-	    @GetMapping("/{cartId}")
-	    public Cart getCartById(@PathVariable Long cartId)
-	    {
-	        return cartService.getCartById(cartId)
-	                .orElseThrow(() -> new RuntimeException("Cart not found with id: " + cartId));
-	    }
+    @PostMapping("/create")
+    public ResponseEntity<CartDTO> createCart(@RequestBody CartDTO cartDTO) 
+    {
+        CartDTO createdCart = cartService.createCart(cartDTO);
+        return new ResponseEntity<>(createdCart, HttpStatus.CREATED);
+    }
 
-	    @PostMapping
-	    public Cart createCart(@RequestBody Cart cart)
-	    {
-	        return cartService.saveCart(cart);
-	    }
+    @GetMapping("/{id}")
+    public ResponseEntity<CartDTO> getCartById(@PathVariable Long id) 
+    {
+        CartDTO cart = cartService.getCartById(id);
+        if (cart != null) {
+            return new ResponseEntity<>(cart, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
 
-	    @PutMapping("/{cartId}")
-	    public Cart updateCart(@PathVariable Long cartId, @RequestBody Cart cart) 
-	    {
-	        if (cartService.getCartById(cartId).isPresent()) {
-	            cart.setId(cartId);
-	            return cartService.updateCart(cart);
-	        } else {
-	            throw new RuntimeException("Cart not found with id: " + cartId);
-	        }
-	    }
-
-	    
+    @PutMapping("/{id}")
+    public ResponseEntity<CartDTO> updateCart(@PathVariable Long id, @RequestBody CartDTO cartDTO)
+    {
+        CartDTO updatedCart = cartService.updateCart(id, cartDTO);
+        if (updatedCart != null) {
+            return new ResponseEntity<>(updatedCart, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
 }

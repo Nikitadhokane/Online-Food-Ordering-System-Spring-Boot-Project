@@ -1,8 +1,8 @@
 package com.sb.foodsystem.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -11,40 +11,44 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.sb.foodsystem.entity.Admin;
-import com.sb.foodsystem.services.AdminService;
+import com.sb.foodsystem.converter.AdminConverter;
+import com.sb.foodsystem.model.AdminDTO;
+import com.sb.foodsystem.service.AdminService;
 
 @RestController
-@RequestMapping("/admins")
+//@RequestMapping("/admins")
+@RequestMapping("/api")
 public class AdminController {
 
-    private final AdminService adminService;
-
     @Autowired
-    public AdminController(AdminService adminService) {
-        this.adminService = adminService;
-    }
+    private AdminService adminService;
 
-    // Endpoint to create an admin
+    @SuppressWarnings("unused")
+	@Autowired
+    private AdminConverter adminConverter;
+
     @PostMapping
-    public ResponseEntity<Admin> createAdmin(@RequestBody Admin admin) {
-        Admin createdAdmin = adminService.createAdmin(admin);
-        return new ResponseEntity<>(createdAdmin, HttpStatus.CREATED);
+    public AdminDTO createAdmin(@RequestBody AdminDTO adminDTO)
+    {
+        return adminService.createAdmin(adminDTO);
     }
 
-    // Endpoint to get an admin by ID
+    @GetMapping
+    public List<AdminDTO> getAllAdmins()
+    {
+        return adminService.getAllAdmins();
+    }
+
     @GetMapping("/{id}")
-    public ResponseEntity<Admin> getAdminById(@PathVariable Long id) {
-        Admin admin = adminService.getAdminById(id);
-        return new ResponseEntity<>(admin, HttpStatus.OK);
+    public AdminDTO getAdminById(@PathVariable Long id)
+    {
+        return adminService.getAdminById(id);
     }
 
-    // Endpoint to update an admin by ID
     @PutMapping("/{id}")
-    public ResponseEntity<Admin> updateAdmin(@PathVariable Long id, @RequestBody Admin admin) {
-        Admin updatedAdmin = adminService.updateAdmin(id, admin);
-        return new ResponseEntity<>(updatedAdmin, HttpStatus.OK);
+    public AdminDTO updateAdmin(@PathVariable Long id, @RequestBody AdminDTO adminDTO)
+    {
+        return adminService.updateAdmin(id, adminDTO);
     }
-
     
 }

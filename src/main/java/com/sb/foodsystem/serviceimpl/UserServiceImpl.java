@@ -43,7 +43,7 @@ public class UserServiceImpl implements UserService {
     public UserDTO updateUser(Long id, UserDTO userDTO) 
     {
         User user = userConverter.dtoToEntity(userDTO);
-        user.setUser_id(id); // Assuming userId is part of the UserDTO
+        user.setUserId(id); // Assuming userId is part of the UserDTO
         user = userRepository.save(user);
         return userConverter.entityToDto(user);
     }
@@ -54,4 +54,11 @@ public class UserServiceImpl implements UserService {
         userRepository.deleteById(id);
         return "User with ID " + id + " has been deleted successfully.";
     }
+
+	@Override
+	public User login(String userName, String password)
+	{
+		User user = userRepository.findByUserNameAndPassword(userName, password);
+		return user;
+	}
 }

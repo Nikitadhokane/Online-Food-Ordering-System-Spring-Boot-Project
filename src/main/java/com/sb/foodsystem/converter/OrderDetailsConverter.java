@@ -10,7 +10,7 @@ public class OrderDetailsConverter {
 
     public OrderDetailsDTO entityToDto(OrderDetails orderDetails) {
         OrderDetailsDTO orderDetailsDTO = new OrderDetailsDTO();
-        orderDetailsDTO.setOrderDetails_Id(orderDetails.getOrder_Details_Id());
+        orderDetailsDTO.setOrderDetails_Id(orderDetails.getOrderDetailsId());
         orderDetailsDTO.setOrder(orderDetails.getOrder());
         orderDetailsDTO.setMenu(orderDetails.getMenu());
         orderDetailsDTO.setAmount(orderDetails.getAmount());
@@ -21,7 +21,7 @@ public class OrderDetailsConverter {
 
     public OrderDetails dtoToEntity(OrderDetailsDTO orderDetailsDTO) {
         OrderDetails orderDetails = new OrderDetails();
-        orderDetails.setOrder_Details_Id(orderDetailsDTO.getOrderDetails_Id());
+        orderDetails.setOrderDetailsId(orderDetailsDTO.getOrderDetails_Id());
         orderDetails.setOrder(orderDetailsDTO.getOrder());
         orderDetails.setMenu(orderDetailsDTO.getMenu());
         orderDetails.setAmount(orderDetailsDTO.getAmount());

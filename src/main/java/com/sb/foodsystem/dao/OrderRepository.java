@@ -6,6 +6,5 @@ import com.sb.foodsystem.entity.Order;
 
 public interface OrderRepository extends JpaRepository<Order,Long>{
 	
-	Order findOrderById(Long id);
-
+	Order findByOrderId(Long orderId);
 }

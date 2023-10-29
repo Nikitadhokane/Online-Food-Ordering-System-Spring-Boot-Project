@@ -1,8 +1,9 @@
 package com.sb.foodsystem.controller;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -11,54 +12,53 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.sb.foodsystem.entity.Payment;
-import com.sb.foodsystem.services.PaymentService;
+import com.sb.foodsystem.converter.PaymentConverter;
+import com.sb.foodsystem.model.PaymentDTO;
+import com.sb.foodsystem.service.PaymentService;
 
 @RestController
-@RequestMapping("/payments")
+//@RequestMapping("/payments")
+@RequestMapping("/api")
 public class PaymentController {
 
-    @Autowired
+	@Autowired
     private final PaymentService paymentService;
-    
-    public PaymentController(PaymentService paymentService)
+	
+	@SuppressWarnings("unused")
+	@Autowired
+    private final PaymentConverter paymentConverter;
+
+    public PaymentController(PaymentService paymentService, PaymentConverter paymentConverter) 
     {
         this.paymentService = paymentService;
+        this.paymentConverter = paymentConverter;
     }
 
-    @GetMapping
-    public List<Payment> getAllPayments()
+    @PostMapping("/payments")
+    public ResponseEntity<PaymentDTO> createPayment(@RequestBody PaymentDTO paymentDTO) 
     {
-        return paymentService.getAllPayments();
+        PaymentDTO createdPayment = paymentService.createPayment(paymentDTO);
+        return new ResponseEntity<>(createdPayment, HttpStatus.CREATED);
     }
 
-    @GetMapping("/{paymentId}")
-    public Payment getPaymentById(@PathVariable Long paymentId) 
+    @GetMapping("/payments/{id}")
+    public ResponseEntity<PaymentDTO> getPaymentById(@PathVariable Long id) 
     {
-        return paymentService.getPaymentById(paymentId)
-                .orElseThrow(() -> new RuntimeException("Payment not found with id: " + paymentId));
+        PaymentDTO payment = paymentService.getPaymentById(id);
+        return new ResponseEntity<>(payment, HttpStatus.OK);
     }
 
-    @PostMapping
-    public Payment createPayment(@RequestBody Payment payment)
+    @PutMapping("/payments/{id}")
+    public ResponseEntity<PaymentDTO> updatePayment(@PathVariable Long id, @RequestBody PaymentDTO paymentDTO)
     {
-        return paymentService.savePayment(payment);
+        PaymentDTO updatedPayment = paymentService.updatePayment(id, paymentDTO);
+        return new ResponseEntity<>(updatedPayment, HttpStatus.OK);
     }
 
-    @PutMapping("/{paymentId}")
-    public Payment updatePayment(@PathVariable Long paymentId, @RequestBody Payment payment) 
+
+    @DeleteMapping("/payments/{id}")
+    public String deletePayment(@PathVariable Long id) 
     {
-        if (paymentService.getPaymentById(paymentId).isPresent()) 
-        {
-            payment.setId(paymentId);
-            return paymentService.updatePayment(payment);
-        }
-        else 
-        {
-            throw new RuntimeException("Payment not found with id: " + paymentId);
-        }
+        return paymentService.deletePayment(id);
     }
-
-    
-
 }

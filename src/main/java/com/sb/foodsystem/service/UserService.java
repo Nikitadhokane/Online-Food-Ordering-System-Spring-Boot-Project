@@ -1,5 +1,6 @@
 package com.sb.foodsystem.service;
 
+import com.sb.foodsystem.entity.User;
 import com.sb.foodsystem.model.UserDTO;
 
 public interface UserService {
@@ -11,4 +12,6 @@ public interface UserService {
     UserDTO updateUser(Long id, UserDTO userDTO);
 
     String deleteUser(Long id);
+
+	User login(String userName, String password);
 }

@@ -11,7 +11,7 @@ public class LoginConverter {
     public LoginDTO entityToDto(Login login) 
     {
         LoginDTO loginDTO = new LoginDTO();
-        loginDTO.setId(login.getId());
+        loginDTO.setId(login.getLoginId());
         loginDTO.setUsername(login.getUsername());
         loginDTO.setPassword(login.getPassword());
         loginDTO.setUser(login.getUser());
@@ -21,7 +21,7 @@ public class LoginConverter {
     public Login dtoToEntity(LoginDTO loginDTO)
     {
         Login login = new Login();
-        login.setId(loginDTO.getId());
+        login.setLoginId((loginDTO.getId()));
         login.setUsername(loginDTO.getUsername());
         login.setPassword(loginDTO.getPassword());
         login.setUser(loginDTO.getUser());

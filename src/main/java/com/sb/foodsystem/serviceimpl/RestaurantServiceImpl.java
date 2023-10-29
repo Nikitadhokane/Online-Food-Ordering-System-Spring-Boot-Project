@@ -13,20 +13,20 @@ import com.sb.foodsystem.service.RestaurantService;
 public class RestaurantServiceImpl implements RestaurantService {
 
 	@Autowired
-    private RestaurantRepository restaurantRepository;
+    private final RestaurantRepository restaurantRepository;
 	
 	@Autowired
-    private RestaurantConverter restaurantConverter;
+    private final RestaurantConverter restaurantConverter;
 
-    
-    public RestaurantServiceImpl(RestaurantRepository restaurantRepository, RestaurantConverter restaurantConverter)
+  
+    public RestaurantServiceImpl(RestaurantRepository restaurantRepository, RestaurantConverter restaurantConverter) 
     {
         this.restaurantRepository = restaurantRepository;
         this.restaurantConverter = restaurantConverter;
     }
 
     @Override
-    public RestaurantDTO createRestaurant(RestaurantDTO restaurantDTO)
+    public RestaurantDTO createRestaurant(RestaurantDTO restaurantDTO) 
     {
         Restaurant restaurant = restaurantConverter.dtoToEntity(restaurantDTO);
         restaurant = restaurantRepository.save(restaurant);
@@ -34,7 +34,7 @@ public class RestaurantServiceImpl implements RestaurantService {
     }
 
     @Override
-    public RestaurantDTO getRestaurantById(Long id)
+    public RestaurantDTO getRestaurantById(Long id) 
     {
         Restaurant restaurant = restaurantRepository.findById(id).orElse(null);
         return restaurantConverter.entityToDto(restaurant);
@@ -50,7 +50,7 @@ public class RestaurantServiceImpl implements RestaurantService {
     }
 
     @Override
-    public String deleteRestaurant(Long id)
+    public String deleteRestaurant(Long id) 
     {
         restaurantRepository.deleteById(id);
         return "Restaurant with ID " + id + " has been deleted successfully.";

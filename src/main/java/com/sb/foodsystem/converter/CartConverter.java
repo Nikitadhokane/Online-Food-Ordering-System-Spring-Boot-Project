@@ -11,7 +11,7 @@ public class CartConverter {
 	
 	public CartDTO entityToDto(Cart cart) {
         CartDTO cartDTO = new CartDTO();
-        cartDTO.setId(cart.getId());
+        cartDTO.setId(null);
         cartDTO.setQuantity(cart.getQuantity());
         cartDTO.setUser(cart.getUser());
         cartDTO.setMenu(cart.getMenu());
@@ -20,7 +20,7 @@ public class CartConverter {
 
     public Cart dtoToEntity(CartDTO cartDTO) {
         Cart cart = new Cart();
-        cart.setId(cartDTO.getId());
+        cart.setCartId(null);
         cart.setQuantity(cartDTO.getQuantity());
         cart.setUser(cartDTO.getUser());
         cart.setMenu(cartDTO.getMenu());

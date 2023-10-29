@@ -43,7 +43,7 @@ public class OrderDetailsServiceImpl implements OrderDetailsService {
     public OrderDetailsDTO updateOrderDetails(Long id, OrderDetailsDTO orderDetailsDTO)
     {
         OrderDetails orderDetails = orderDetailsConverter.dtoToEntity(orderDetailsDTO);
-        orderDetails.setOrder_Details_Id(id); // Assuming orderDetailsId is part of the OrderDetailsDTO
+        orderDetails.setOrderDetailsId(id);// Assuming orderDetailsId is part of the OrderDetailsDTO
         orderDetails = orderDetailsRepository.save(orderDetails);
         return orderDetailsConverter.entityToDto(orderDetails);
     }

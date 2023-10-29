@@ -7,6 +7,6 @@ import com.sb.foodsystem.entity.OrderDetails;
 
 public interface OrderDetailsRepository extends JpaRepository<OrderDetails, Long> {
 	
-	OrderDetails findOrderById(Long id);
+	OrderDetails findOrderDetailsByOrderDetailsId(Long orderDetailsId);
 
 }

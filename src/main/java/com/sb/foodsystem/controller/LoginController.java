@@ -1,7 +1,5 @@
 package com.sb.foodsystem.controller;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -11,54 +9,37 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.sb.foodsystem.entity.Login;
-import com.sb.foodsystem.services.LoginService;
+import com.sb.foodsystem.converter.LoginConverter;
+import com.sb.foodsystem.model.LoginDTO;
+import com.sb.foodsystem.service.LoginService;
 
 @RestController
-@RequestMapping("/logins")
+//@RequestMapping("/login")
+@RequestMapping("/api")
 public class LoginController {
-	
-    @Autowired
+
+	@Autowired
     private LoginService loginService;
+	
+	@SuppressWarnings("unused")
+	@Autowired
+	private LoginConverter loginConverter;
 
-    public LoginController(LoginService loginService) 
+    @PostMapping("/login")
+    public LoginDTO createLogin(@RequestBody LoginDTO loginDTO)
     {
-        this.loginService = loginService;
+        return loginService.createLogin(loginDTO);
     }
 
-    @GetMapping
-    public List<Login> getAllLogins()
+    @GetMapping("/login/{id}")
+    public LoginDTO getLoginById(@PathVariable Long id)
     {
-        return loginService.getAllLogins();
+        return loginService.getLoginById(id);
     }
 
-    @GetMapping("/{loginId}")
-    public Login getLoginById(@PathVariable Long loginId)
+    @PutMapping("\"/login/{id}\"")
+    public LoginDTO updateLogin(@PathVariable Long id, @RequestBody LoginDTO loginDTO) 
     {
-        return loginService.getLoginById(loginId)
-                .orElseThrow(() -> new RuntimeException("Login not found with id: " + loginId));
+        return loginService.updateLogin(id, loginDTO);
     }
-
-    @PostMapping
-    public Login createLogin(@RequestBody Login login) 
-    {
-        return loginService.saveLogin(login);
-    }
-
-    @PutMapping("/{loginId}")
-    public Login updateLogin(@PathVariable Long loginId, @RequestBody Login login) 
-    {
-        if (loginService.getLoginById(loginId).isPresent())
-        {
-            login.setId(loginId);
-            return loginService.updateLogin(login);
-        } 
-        else 
-        {
-            throw new RuntimeException("Login not found with id: " + loginId);
-        }
-    }
-
-    
-
 }

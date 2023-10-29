@@ -1,8 +1,9 @@
 package com.sb.foodsystem.controller;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -11,55 +12,52 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.sb.foodsystem.entity.OrderDetails;
-import com.sb.foodsystem.services.OrderDetailsService;
+import com.sb.foodsystem.converter.OrderDetailsConverter;
+import com.sb.foodsystem.model.OrderDetailsDTO;
+import com.sb.foodsystem.service.OrderDetailsService;
 
 @RestController
-@RequestMapping("/order-details")
+//@RequestMapping("/orderdetails")
+@RequestMapping("/api")
 public class OrderDetailsController {
+
+	@Autowired
+    private final OrderDetailsService orderDetailsService;
 	
+	@SuppressWarnings("unused")
+	@Autowired
+	private final OrderDetailsConverter orderDetailsConverter;
 
-    @Autowired
-    private OrderDetailsService orderDetailsService;
-    
-    public OrderDetailsController(OrderDetailsService orderDetailsService) 
-    {
+   
+    public OrderDetailsController(OrderDetailsService orderDetailsService) {
         this.orderDetailsService = orderDetailsService;
+		this.orderDetailsConverter = new OrderDetailsConverter();
     }
 
-    @GetMapping
-    public List<OrderDetails> getAllOrderDetails() 
+    @PostMapping("/orderDetails")
+    public ResponseEntity<OrderDetailsDTO> createOrderDetails(@RequestBody OrderDetailsDTO orderDetailsDTO)
     {
-        return orderDetailsService.getAllOrderDetails();
+        OrderDetailsDTO createdOrderDetails = orderDetailsService.createOrderDetails(orderDetailsDTO);
+        return new ResponseEntity<>(createdOrderDetails, HttpStatus.CREATED);
     }
 
-    @GetMapping("/{orderDetailsId}")
-    public OrderDetails getOrderDetailsById(@PathVariable Long orderDetailsId) 
+    @GetMapping("/orderDetails/{id}")
+    public ResponseEntity<OrderDetailsDTO> getOrderDetailsById(@PathVariable Long id) 
     {
-        return orderDetailsService.getOrderDetailsById(orderDetailsId)
-                .orElseThrow(() -> new RuntimeException("Order details not found with id: " + orderDetailsId));
+        OrderDetailsDTO orderDetails = orderDetailsService.getOrderDetailsById(id);
+        return new ResponseEntity<>(orderDetails, HttpStatus.OK);
     }
 
-    @PostMapping
-    public OrderDetails createOrderDetails(@RequestBody OrderDetails orderDetails) 
+    @PutMapping("/orderDetails/{id}")
+    public ResponseEntity<OrderDetailsDTO> updateOrderDetails(@PathVariable Long id, @RequestBody OrderDetailsDTO orderDetailsDTO) 
     {
-        return orderDetailsService.saveOrderDetails(orderDetails);
+        OrderDetailsDTO updatedOrderDetails = orderDetailsService.updateOrderDetails(id, orderDetailsDTO);
+        return new ResponseEntity<>(updatedOrderDetails, HttpStatus.OK);
     }
 
-    @PutMapping("/{orderDetailsId}")
-    public OrderDetails updateOrderDetails(@PathVariable Long orderDetailsId, @RequestBody OrderDetails orderDetails)
+    @DeleteMapping("/orderDetails/{id}")
+    public String deleteOrderDetails(@PathVariable Long id) 
     {
-        if (orderDetailsService.getOrderDetailsById(orderDetailsId).isPresent())
-        {
-            orderDetails.setOrder_Details_Id(orderDetailsId);
-            return orderDetailsService.updateOrderDetails(orderDetails);
-        }
-        else
-        {
-            throw new RuntimeException("Order details not found with id: " + orderDetailsId);
-        }
+        return orderDetailsService.deleteOrderDetails(id);
     }
-
-    
-
 }

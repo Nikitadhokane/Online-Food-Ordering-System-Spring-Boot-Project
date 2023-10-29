@@ -13,12 +13,12 @@ import lombok.Setter;
 @Getter
 public class OrderDTO {
 	
-	private Long order_id;
-	private User user;
-	private Restaurant restaurant;
-	private Date orderDate;
-	private int totalAmount;
-	private Long userId;
-	private String status;
+	private Long orderId;
+    private User user;
+    private Restaurant restaurant;
+    private Date orderDate;
+    private int totalAmount;
+    private Long userId;
+    private String status;
 
 }

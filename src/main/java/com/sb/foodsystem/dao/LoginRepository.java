@@ -6,6 +6,6 @@ import com.sb.foodsystem.entity.Login;
 
 public interface LoginRepository extends JpaRepository<Login, Long>{
 	
-	Login findByLoginId(Long id);
+	Login findByLoginId(Long loginId);
 
 }

@@ -6,6 +6,6 @@ import com.sb.foodsystem.entity.User;
 
 public interface UserRepository  extends JpaRepository<User,Long> {
 	
-	User findByUserId(Long userId);
+	User findByUserNameAndPassword(String userName,String password);
 
 }

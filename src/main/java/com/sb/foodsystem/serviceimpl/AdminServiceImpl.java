@@ -1,5 +1,7 @@
 package com.sb.foodsystem.serviceimpl;
 
+import java.util.ArrayList;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,45 +16,66 @@ import com.sb.foodsystem.service.AdminService;
 public class AdminServiceImpl implements AdminService {
 
 	@Autowired
-    private  AdminRepository adminRepository;
+    private final AdminRepository adminRepository;
 	
 	@Autowired
-    private  AdminConverter adminConverter;
+    private final AdminConverter adminConverter;
 
-    public AdminServiceImpl(AdminRepository adminRepository, AdminConverter adminConverter)
-    {
+    public AdminServiceImpl(AdminRepository adminRepository, AdminConverter adminConverter) {
         this.adminRepository = adminRepository;
         this.adminConverter = adminConverter;
     }
 
     @Override
-    public AdminDTO createAdmin(AdminDTO adminDTO) 
-    {
-        Admin admin = adminConverter.convertToAdminEntity(adminDTO);
+    public AdminDTO createAdmin(AdminDTO adminDTO) {
+        Admin admin = adminConverter.dtoToEntity(adminDTO);
         admin = adminRepository.save(admin);
-        return adminConverter.convertToAdminDTO(admin);
+        return adminConverter.entityToDto(admin);
     }
 
+//    @Override
+//    public List<AdminDTO> getAllAdmins() {
+//        List<Admin> admins = adminRepository.findAll();
+//        return admins.stream(adminConverter.dtoToEntity(adminDTO)).collect(Collectors.toList());
+//    }
+    
     @Override
-    public AdminDTO getAdminById(Long id)
-    {
-        Admin admin = adminRepository.findById(id).orElse(null);
-        return adminConverter.convertToAdminDTO(admin);
+	public List<AdminDTO> getAllAdmins() {
+		List<Admin> admins=adminRepository.findAll();
+		
+		//list of type DTO
+		List<AdminDTO> dtoList=new ArrayList<>();
+		for(Admin a:admins)
+		{
+			dtoList.add(adminConverter.entityToDto(a));
+		}
+		
+		return dtoList;
+	}
+
+
+    @Override
+    public AdminDTO getAdminById(Long id) {
+        Admin admin = adminRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Admin not found with ID: " + id));
+        return adminConverter.entityToDto(admin);
     }
 
     @Override
     public AdminDTO updateAdmin(Long id, AdminDTO adminDTO) 
     {
-        Admin admin = adminConverter.convertToAdminEntity(adminDTO);
-        admin.setId(id); // Assuming id is part of the AdminDTO
-        admin = adminRepository.save(admin);
-        return adminConverter.convertToAdminDTO(admin);
+        Admin existingAdmin = adminRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Admin not found with ID: " + id));
+        Admin updatedAdmin = adminConverter.dtoToEntity(adminDTO);
+        updatedAdmin.setId(existingAdmin.getId()); // Maintain the original ID
+        adminRepository.save(updatedAdmin);
+        return adminConverter.entityToDto(updatedAdmin);
     }
 
     @Override
-    public String deleteAdmin(Long id) 
-    {
+    public String deleteAdmin(Long id) {
         adminRepository.deleteById(id);
         return "Admin with ID " + id + " has been deleted successfully.";
     }
+
 }

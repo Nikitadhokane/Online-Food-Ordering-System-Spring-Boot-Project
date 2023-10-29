@@ -10,7 +10,7 @@ public class OrderConverter {
 
     public OrderDTO entityToDto(Order order) {
         OrderDTO orderDTO = new OrderDTO();
-        orderDTO.setOrder_id(order.getOrder_id());
+        orderDTO.setOrderId(order.getOrderId());
         orderDTO.setUser(order.getUser());
         orderDTO.setRestaurant(order.getRestaurant());
         orderDTO.setOrderDate(order.getOrderDate());
@@ -22,7 +22,7 @@ public class OrderConverter {
 
     public Order dtoToEntity(OrderDTO orderDTO) {
         Order order = new Order();
-        order.setOrder_id(orderDTO.getOrder_id());
+        order.setOrderId(orderDTO.getOrderId());
         order.setUser(orderDTO.getUser());
         order.setRestaurant(orderDTO.getRestaurant());
         order.setOrderDate(orderDTO.getOrderDate());

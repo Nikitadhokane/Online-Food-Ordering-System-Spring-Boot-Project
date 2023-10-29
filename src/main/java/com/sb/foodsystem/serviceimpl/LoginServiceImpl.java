@@ -43,7 +43,7 @@ public class LoginServiceImpl implements LoginService {
     public LoginDTO updateLogin(Long id, LoginDTO loginDTO) 
     {
         Login login = loginConverter.dtoToEntity(loginDTO);
-        login.setId(id); // Assuming id is part of the LoginDTO
+        login.setLoginId(id);  // Assuming id is part of the LoginDTO
         login = loginRepository.save(login);
         return loginConverter.entityToDto(login);
     }

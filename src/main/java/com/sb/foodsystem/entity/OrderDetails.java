@@ -24,14 +24,14 @@ public class OrderDetails {
 	    @GeneratedValue(strategy=GenerationType.IDENTITY)
 	 
 	    @Column(name = "Order_Details_ID")
-	    private Long order_Details_Id;
+	    private Long orderDetailsId;
 
 	    @ManyToOne
-	    @JoinColumn(name = "Order_ID")
+	    @JoinColumn(name = "orderId")
 	    private Order order;
 
 	    @ManyToOne
-	    @JoinColumn(name = "Menu_ID")
+	    @JoinColumn(name = "menuId")
 	    private Menu menu;
 
 	    @Column(name = "Amount")
